@@ -13,8 +13,8 @@ function App() {
         <Router>
           <Routes>
             <Route path="/study" element={<StudyInterface />} />
-            <Route path="/" element={<Navigate to="/study" replace />} />
-            <Route path="*" element={<Navigate to="/study" replace />} />
+            <Route path="/" element={<Navigate to="/study\" replace />} />
+            <Route path="*" element={<Navigate to="/study\" replace />} />
           </Routes>
           <Toaster />
         </Router>
