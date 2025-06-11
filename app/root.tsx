@@ -133,8 +133,15 @@ export default function App({ loaderData }: Route.ComponentProps) {
       loaderData={loaderData}
       signUpFallbackRedirectUrl="/dashboard"
       signInFallbackRedirectUrl="/dashboard"
-      signUpForceRedirectUrl="/dashboard"
-      signInForceRedirectUrl="/dashboard"
+      appearance={{
+        variables: {
+          colorPrimary: "#2563eb",
+        },
+        elements: {
+          formButtonPrimary: "bg-blue-600 hover:bg-blue-700 text-white",
+          card: "shadow-lg",
+        }
+      }}
     >
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <Outlet />
