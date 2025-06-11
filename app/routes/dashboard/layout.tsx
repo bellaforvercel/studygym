@@ -17,20 +17,34 @@ export async function loader(args: Route.LoaderArgs) {
     throw redirect("/sign-in");
   }
 
-  // Parallel data fetching to reduce waterfall
-  const [subscriptionStatus, user] = await Promise.all([
-    fetchQuery(api.subscriptions.checkUserSubscriptionStatus, { userId }),
-    createClerkClient({
+  try {
+    // Parallel data fetching to reduce waterfall
+    const [subscriptionStatus, user] = await Promise.all([
+      fetchQuery(api.subscriptions.checkUserSubscriptionStatus, { userId }).catch(() => null),
+      createClerkClient({
+        secretKey: process.env.CLERK_SECRET_KEY,
+      }).users.getUser(userId)
+    ]);
+
+    // Only redirect to subscription-required for specific protected routes
+    // Allow access to settings and basic dashboard even without subscription
+    const url = new URL(args.request.url);
+    const isProtectedRoute = url.pathname.includes('/chat') || url.pathname.includes('/premium');
+    
+    if (isProtectedRoute && !subscriptionStatus?.hasActiveSubscription) {
+      throw redirect("/subscription-required");
+    }
+
+    return { user, subscriptionStatus };
+  } catch (error) {
+    console.error("Error in dashboard loader:", error);
+    // If there's an error fetching data, still allow access but with limited functionality
+    const user = await createClerkClient({
       secretKey: process.env.CLERK_SECRET_KEY,
-    }).users.getUser(userId)
-  ]);
-
-  // Redirect to subscription-required if no active subscription
-  if (!subscriptionStatus?.hasActiveSubscription) {
-    throw redirect("/subscription-required");
+    }).users.getUser(userId);
+    
+    return { user, subscriptionStatus: null };
   }
-
-  return { user };
 }
 
 export default function DashboardLayout() {
