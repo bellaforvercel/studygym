@@ -28,7 +28,9 @@ const getConvexUrl = () => {
 const convex = new ConvexReactClient(getConvexUrl());
 
 export async function loader(args: Route.LoaderArgs) {
-  return rootAuthLoader(args);
+  return rootAuthLoader(args, {
+    secretKey: process.env.CLERK_SECRET_KEY,
+  });
 }
 
 export const links: Route.LinksFunction = () => [
