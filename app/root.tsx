@@ -131,17 +131,8 @@ export default function App({ loaderData }: Route.ComponentProps) {
   return (
     <ClerkProvider
       loaderData={loaderData}
-      signUpFallbackRedirectUrl="/dashboard"
-      signInFallbackRedirectUrl="/dashboard"
-      appearance={{
-        variables: {
-          colorPrimary: "#2563eb",
-        },
-        elements: {
-          formButtonPrimary: "bg-blue-600 hover:bg-blue-700 text-white",
-          card: "shadow-lg",
-        }
-      }}
+      signUpFallbackRedirectUrl="/"
+      signInFallbackRedirectUrl="/"
     >
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <Outlet />
