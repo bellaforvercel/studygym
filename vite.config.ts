@@ -1,15 +1,15 @@
-import path from 'path';
-import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  optimizeDeps: {
-    exclude: ['lucide-react'],
-  },
+  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+
+server:{
+  allowedHosts: [
+    
+    "cb47-196-188-252-110.ngrok-free.app"
+  ],
+}
 });
